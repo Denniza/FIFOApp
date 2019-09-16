@@ -14,14 +14,14 @@ public class BaseConfig {
     static {
         try {
             DriverManager.registerDriver(new Driver());
-            System.out.println("Driver connected");
+//            System.out.println("Driver connected");
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Ошибка загрузки драйвера DB");
         }
     }
 
-    BaseConfig(Properties properties){
+    public BaseConfig(Properties properties){
         this.properties = properties;
         try {
             init();
@@ -46,10 +46,10 @@ public class BaseConfig {
                 "IS_SOLD BOOLEAN," +
                 "PRIMARY KEY (PRODUCT_ID))");
         closeConnection(connection);
-        System.out.println("База инициализирована");
+//        System.out.println("База инициализирована");
     }
 
-    Connection getConnection(){
+    public Connection getConnection(){
         Connection connection=null;
         try {
             connection = DriverManager.getConnection(properties.getProperty("datasourceUrl"),
@@ -61,7 +61,7 @@ public class BaseConfig {
         return connection;
     }
 
-    void closeConnection(Connection connection){
+    public void closeConnection(Connection connection){
         if(connection==null) return;
         try{
             connection.close();

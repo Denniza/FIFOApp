@@ -3,6 +3,7 @@ import service.ArgsValidationService;
 import service.ProductService;
 import util.Commands;
 
+import javax.xml.bind.SchemaOutputResolver;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.Scanner;
@@ -16,18 +17,25 @@ public class Application {
         ArgsValidationService argsValidationService = new ArgsValidationService();
         ProductService productService = new ProductService(productDao,argsValidationService);
 
+        System.out.println("Добро пожаловать! Ниже вы увидите список доступных команд. Для выхода введите 'exit'\n" +
+                "параметры вводятся через пробел\n" +
+                "NEWPRODUCT <name> - Создать товар - на вход подается уникальное\n" +
+                "наименование товара\n" +
+                "PURCHASE <name> <amount> <price> <date> - Закупить товар - на вход подается\n" +
+                "наименование товара, кол-во закупленного товара, цена единицы товара и дата\n" +
+                "закупки\n" +
+                "DEMAND <name> <amount> <price> <date> - Продать товар - на вход подается\n" +
+                "наименование товара, кол-во проданного товара, цена единицы товара и дата\n" +
+                "продажи\n" +
+                "SALESREPORT <name> <date> - Рассчитать прибыльность - на вход подается\n" +
+                "наименование товара и дата. Результат - прибыль на указанную дату.");
+
         while (true){
             Scanner scanner = new Scanner(System.in);
             String [] arguments = scanner.nextLine().split(" ");
             if(arguments[0].equals("exit")) break;
             productService.executeCommand(arguments);
         }
-//        productService.executeCommand(Commands.NEWPRODUCT, new String[]{"iphone"});
-//        productService.executeCommand(Commands.NEWPRODUCT, new String[]{"iphone"});
-//        productService.executeCommand(Commands.PURCHASE, new String[]{"iphone", "1", "1000", "01.01.2017"});
-//        productService.executeCommand(Commands.PURCHASE, new String[]{"iphone", "2", "2000", "01.01.2017"});
-//        productService.executeCommand(Commands.DEMAND, new String[]{"iphone", "2", "5000", "01.03.2017"});
-//        productService.executeCommand(Commands.SALESREPORT, new String[]{"iphone", "01.01.2020"});
 
     }
     private static void init(){
@@ -38,5 +46,4 @@ public class Application {
             e.printStackTrace();
         }
     }
-
 }
