@@ -21,40 +21,40 @@ public class ProductService {
         this.validationService = validationService;
     }
 
-    public void executeCommand(String [] args){
+    public boolean executeCommand(String [] args){
         try {
             switch (Commands.valueOf(args[0])) {
                 case NEWPRODUCT:
-                    newProductCommand(args);
-                    break;
+                    return newProductCommand(args);
                 case PURCHASE:
-                    purchaseCommand(args);
-                    break;
+                    return purchaseCommand(args);
                 case DEMAND:
-                    demandCommand(args);
-                    break;
+                    return demandCommand(args);
                 case SALESREPORT:
-                    salesReportCommand(args);
-                    break;
+                    return salesReportCommand(args);
             }
         }catch (IllegalArgumentException e){
             System.out.println("ERROR  (Несуществующая команда) ");
         }
+        return false;
     }
 
-    private void newProductCommand(String [] args){
+    private boolean newProductCommand(String [] args){
         try {
             if (!validationService.existsProdValidation(args)){
                 System.out.println("ERROR (товар уже есть в базе)");
+                return false;
             } else{
                 System.out.println("OK");
+                return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
-    private void purchaseCommand(String []args){
+    private boolean purchaseCommand(String []args){
         if(validationService.purchaseAndDemandValidation(args)){
             String productName = args[1];
             int price = Integer.parseInt(args[3]);
@@ -63,10 +63,12 @@ public class ProductService {
                     DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             productDao.addProduct(productName,amount,price,date);
             System.out.println("OK");
+            return true;
         } else System.out.println("ERROR");
+        return false;
     }
 
-    private void demandCommand(String [] args){
+    private boolean demandCommand(String [] args){
         if(validationService.purchaseAndDemandValidation(args)){
             String productName = args[1];
             int amount = Integer.parseInt(args[2]);
@@ -75,17 +77,21 @@ public class ProductService {
                     DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             productDao.demandProduct(productName,amount,price,date);
             System.out.println("OK");
+            return true;
         } else System.out.println("ERROR");
+        return false;
     }
 
-    private void salesReportCommand(String [] args){
+    private boolean salesReportCommand(String [] args){
         if(validationService.salesReportValidation(args)){
             String productName= args[1];
             Date date = Date.valueOf(LocalDate.parse(args[2],
                     DateTimeFormatter.ofPattern("dd.MM.yyyy")));
             List<Product> result = productDao.findByNameAndDate(productName,date);
             System.out.println(FIFOCostPrice(result));
+            return true;
         } else System.out.println("ERROR");
+        return false;
     }
 
     //метод рассчёта прибыли

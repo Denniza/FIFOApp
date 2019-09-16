@@ -21,7 +21,7 @@ public class BaseConfig {
         }
     }
 
-    public BaseConfig(Properties properties){
+    BaseConfig(Properties properties){
         this.properties = properties;
         try {
             init();
@@ -49,7 +49,7 @@ public class BaseConfig {
         System.out.println("База инициализирована");
     }
 
-    public Connection getConnection(){
+    Connection getConnection(){
         Connection connection=null;
         try {
             connection = DriverManager.getConnection(properties.getProperty("datasourceUrl"),
@@ -61,7 +61,7 @@ public class BaseConfig {
         return connection;
     }
 
-    public void closeConnection(Connection connection){
+    void closeConnection(Connection connection){
         if(connection==null) return;
         try{
             connection.close();

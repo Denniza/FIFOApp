@@ -75,7 +75,7 @@ public class ProductDao extends BaseConfig {
 
     //метод обновляет данные в БД, выставляя цену продажи и дату для нужного количества продуктов
     public boolean demandProduct(String productName, int amount, int price, LocalDate date){
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         Connection connection= null;
         try {
             connection = getConnection();
@@ -86,7 +86,7 @@ public class ProductDao extends BaseConfig {
                                         "IS_SOLD = true " +
                                         "WHERE PRODUCT_ID IN(SELECT PRODUCT_ID FROM Products " +
                                         "where PRODUCT_NAME = ? AND IS_SOLD = false " +
-                                        "ORDER BY(PRODUCT_ID) LIMIT ?)");
+                                        "ORDER BY(PURCHASE_DATE) LIMIT ?)");
                 statement.setInt(1,price);
                 statement.setDate(2,Date.valueOf(date));
                 statement.setString(3,productName);
